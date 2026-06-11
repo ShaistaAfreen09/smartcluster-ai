@@ -3,9 +3,10 @@ import { Link } from 'react-router-dom'
 
 const items = [
   { label: 'Dashboard', icon: Activity, path: '/' },
-  { label: 'Cluster', icon: ServerCog, path: '/' },
-  { label: 'Workloads', icon: BarChart3, path: '/' },
-  { label: 'AI Insights', icon: Sparkles, path: '/' },
+  { label: 'Cluster', icon: ServerCog, path: '/cluster' },
+  { label: 'Nodes', icon: BarChart3, path: '/nodes' },
+  { label: 'Pods', icon: BarChart3, path: '/pods' },
+  { label: 'AI Insights', icon: Sparkles, path: '/insights' },
   { label: 'Datastore', icon: Database, path: '/' },
 ]
 
