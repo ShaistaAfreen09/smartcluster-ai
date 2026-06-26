@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: smartcluster
+  labels:
+    tier: enterprise
+    monitored-by: prometheus

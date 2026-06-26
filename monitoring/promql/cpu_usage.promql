@@ -1,0 +1,6 @@
+# Purpose: Summed CPU core rate usage averaged over 5 minute intervals across container runtime layers
+# Expected Output: Gauge values representing total CPU Cores consumed in current scope
+# Units: vCPUs (cores)
+# Dashboard usage: Primary cluster workload indicators panel
+
+sum(rate(container_cpu_usage_seconds_total{container!=""}[5m]))

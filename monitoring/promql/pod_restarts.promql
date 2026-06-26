@@ -1,0 +1,6 @@
+# Purpose: Tracks accumulative pod restarts counts inside namespace scopes over a 5 minute interval
+# Expected Output: Intermittent counts representing container crash indices
+# Units: Integer restarts
+# Dashboard usage: Cluster stability status bar and automated diagnostic panels
+
+sum(changes(kube_pod_container_status_restarts_total[5m])) by (namespace, pod)

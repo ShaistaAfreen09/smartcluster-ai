@@ -1,0 +1,1 @@
+from ml.inference.scaling_advisor import SmartScalingAdvisor

@@ -1,0 +1,6 @@
+{
+  "name": "SmartCluster AI",
+  "description": "SmartCluster AI is a research-grade full-stack Kubernetes simulation dashboard featuring real-time cluster monitoring, predictive ML-based resource allocation, an AI-driven scaling recommendation engine, and comparative HPA vs proactive scaling simulations.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

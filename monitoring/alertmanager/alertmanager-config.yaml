@@ -1,0 +1,30 @@
+global:
+  resolve_timeout: 5m
+
+route:
+  group_by: ['alertname', 'cluster', 'service']
+  group_wait: 30s
+  group_interval: 5m
+  repeat_interval: 12h
+  receiver: 'smartcluster-backend-webhook'
+  routes:
+  - match:
+      severity: critical
+    receiver: 'pager-critical'
+
+receivers:
+- name: 'smartcluster-backend-webhook'
+  webhook_configs:
+  - url: 'http://smartcluster-api.default.svc.cluster.local:3000/api/alerts'
+    send_resolved: true
+
+- name: 'pager-critical'
+  webhook_configs:
+  - url: 'http://smartcluster-api.default.svc.cluster.local:3000/api/alerts?priority=high'
+    send_resolved: true
+  email_configs:
+  - to: 'admin@smartcluster.ai'
+    from: 'alertmanager@smartcluster.ai'
+    smarthost: 'smtp.smartcluster.ai:587'
+    auth_username: 'alertmanager'
+    auth_password: 'super-secure-smtp-password'

@@ -1,0 +1,71 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prometheus-alert-rules
+  namespace: monitoring
+data:
+  alert-rules.yaml: |
+    groups:
+      - name: smartcluster-alerts
+        rules:
+          - alert: NodeUnavailable
+            expr: kube_node_status_condition{condition="Ready", status="true"} == 0
+            for: 3m
+            labels:
+              severity: critical
+            annotations:
+              summary: "Node {{ $labels.node }} is unavailable"
+              description: "A node has reported NotReady status for over 3 minutes."
+
+          - alert: CPU_Utilization_Critical
+            expr: 100 - (avg by (instance) (rate(node_cpu_seconds_total{mode="idle"}[5m])) * 100) > 90
+            for: 5m
+            labels:
+              severity: critical
+            annotations:
+              summary: "Instance {{ $labels.instance }} CPU saturation critical"
+              description: "CPU load exceeds 90% for more than 5 minutes."
+
+          - alert: CPU_Utilization_Warning
+            expr: 100 - (avg by (instance) (rate(node_cpu_seconds_total{mode="idle"}[5m])) * 100) > 75
+            for: 5m
+            labels:
+              severity: warning
+            annotations:
+              summary: "Instance {{ $labels.instance }} CPU utilization high"
+              description: "CPU usage has exceeded 75% standard thresholds."
+
+          - alert: RAM_Utilization_Critical
+            expr: ((node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes) / node_memory_MemTotal_bytes) * 100 > 90
+            for: 5m
+            labels:
+              severity: critical
+            annotations:
+              summary: "Memory consumption critical on {{ $labels.instance }}"
+
+          - alert: PodCrashLoopBackOff
+            expr: rate(kube_pod_container_status_restarts_total[5m]) * 60 > 2
+            for: 2m
+            labels:
+              severity: critical
+            annotations:
+              summary: "Pod {{ $labels.pod }} is crash looping"
+              description: "Pod is restarting frequently (>2 times/minute) in namespace {{ $labels.namespace }}."
+
+          - alert: HighRequestLatency
+            expr: http_request_duration_seconds{quantile="0.99"} > 0.5
+            for: 5m
+            labels:
+              severity: warning
+            annotations:
+              summary: "High API Request Latency detected"
+              description: "99th percentile response latencies exceed 500ms."
+
+          - alert: HighRateOfHTTP5xxErrors
+            expr: sum(rate(http_requests_total{status=~"5.."}[5m])) / sum(rate(http_requests_total[5m])) * 100 > 5
+            for: 3m
+            labels:
+              severity: warning
+            annotations:
+              summary: "Elevated HTTP 5xx errors rate"
+              description: "Inter-microservice requests error percent is above 5%."

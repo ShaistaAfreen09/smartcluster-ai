@@ -1,0 +1,6 @@
+# Purpose: Estimates 99th percentile of request execution latencies across active endpoints
+# Expected Output: Gauge timings indicating response delays
+# Units: Seconds
+# Dashboard usage: Site reliability objective (SLO) compliance dashboard panels
+
+histogram_quantile(0.99, sum(rate(http_request_duration_seconds_bucket[5m])) by (le, path))

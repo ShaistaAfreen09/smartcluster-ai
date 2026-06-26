@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: analytics-worker
+  namespace: smartcluster
+  labels:
+    app: analytics-worker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: analytics-worker
+  template:
+    metadata:
+      labels:
+        app: analytics-worker
+    spec:
+      containers:
+      - name: worker
+        image: python:3.11-slim
+        command: ["python", "-c", "import time; print('Analytics Loop Started...'); [time.sleep(3600) for _ in range(24)]"]
+        resources:
+          requests:
+            cpu: "250m"
+            memory: "512Mi"
+          limits:
+            cpu: "1000m"
+            memory: "1024Mi"
+        env:
+        - name: QUEUE_CONCURRENCY
+          value: "4"
+        - name: ANALYTICS_MODE
+          value: "BATCH"
+        # No port exposes since this is a worker, but we include custom commands simulating process liveness

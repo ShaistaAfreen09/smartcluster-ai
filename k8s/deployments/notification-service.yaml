@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: notification-service
+  namespace: smartcluster
+  labels:
+    app: notification-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: notification-service
+  template:
+    metadata:
+      labels:
+        app: notification-service
+    spec:
+      containers:
+      - name: email-sender
+        image: alpine:latest
+        command: ["/bin/sh", "-c", "while true; do echo 'Notifications dispatcher active'; sleep 30; done"]
+        resources:
+          requests:
+            cpu: "50m"
+            memory: "64Mi"
+          limits:
+            cpu: "100m"
+            memory: "128Mi"
+        env:
+        - name: SMTP_SERVER
+          value: "mail.smtp-auth.smartcluster"
+        - name: NOTIFY_CHANNELS
+          value: "EMAIL,SLACK,WEBHOOK"

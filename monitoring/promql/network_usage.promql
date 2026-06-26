@@ -1,0 +1,6 @@
+# Purpose: Scrapes total network receive bandwidth rate over 5 minute windows
+# Expected Output: Transferred bandwidth speed metrics
+# Units: Bytes / Second
+# Dashboard usage: Ingress throughput and traffic trends linegraph
+
+sum(rate(container_network_receive_bytes_total[5m]))

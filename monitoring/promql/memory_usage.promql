@@ -1,0 +1,6 @@
+# Purpose: Aggregates active working memory consumption bytes across all container processes
+# Expected Output: Gauge values mapping overall bytes allocated
+# Units: Bytes
+# Dashboard usage: Side-by-side memory saturation indicators
+
+sum(container_memory_usage_bytes{container!=""})

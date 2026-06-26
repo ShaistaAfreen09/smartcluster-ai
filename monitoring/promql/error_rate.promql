@@ -1,0 +1,6 @@
+# Purpose: Computes quotient of 5xx server error responses divided by sum of total requests
+# Expected Output: Fraction representing error frequencies
+# Units: Percentage (%)
+# Dashboard usage: Site health statuses indicators
+
+(sum(rate(http_requests_total{status=~"5.."}[5m])) / sum(rate(http_requests_total[5m]))) * 100
